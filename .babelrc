@@ -1,11 +1,14 @@
 {
   "presets": [
-    "flow",
-    ["env", {
+    ["@babel/preset-env", {
       "targets": {
         "node": "current"
       }
     }]
   ],
-  "plugins": ["babel-plugin-transform-flow-strip-types"]
+  "plugins": [
+    "@babel/plugin-transform-flow-strip-types",
+    "@babel/plugin-proposal-class-properties",
+    "@babel/plugin-proposal-object-rest-spread"
+  ]
 }

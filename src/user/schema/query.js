@@ -3,7 +3,7 @@ import { gql } from 'apollo-server'
 
 const query = gql`
   type Query {
-    banners: [Banner]
+    user: User
   }
 `
 

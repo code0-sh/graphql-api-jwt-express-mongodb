@@ -12,9 +12,7 @@ import helmet from 'helmet'
 import fs from 'fs'
 import RateLimit from 'express-rate-limit'
 import './db'
-import auth from './auth/Passport'
-import UserController from './user/UserController'
-import AuthenticateController from './auth/AuthController'
+import auth from './auth/passport'
 
 import schemas from './schemas'
 import resolvers from './resolvers'
@@ -25,8 +23,6 @@ import type { $Request, $Response } from 'express'
 export const pubsub = new PubSub()
 
 const app = express()
-
-const getErrorCode = errorName => errorType[errorName]
 
 if (app.get('env') === 'production') {
   // helmet
@@ -67,15 +63,6 @@ app.use(auth.initialize())
 app.use(bodyParser.text({ type: 'application/graphql' }))
 app.use(bodyParser.json())
 
-app.get('/api', (req: $Request, res: $Response) => {
-  res.send({
-    status: 'API is alive!'
-  })
-})
-
-app.use('/api/auth', AuthenticateController)
-app.use('/api/users', UserController)
-
 const schema: GraphQLSchema = mergeSchemas({
   schemas,
   resolvers
@@ -84,11 +71,12 @@ const path = '/graphql'
 const server = new ApolloServer({
   schema,
   formatError: err => {
-    const error = getErrorCode(err.message)
-    return { message: error.message, statusCode: error.statusCode }
+    const { message, statusCode } = err.originalError
+    return { message, statusCode }
   },
   uploads: false,
-  tracing: true
+  tracing: true,
+  context: ({ req, res }) => ({ token: req.headers.authorization })
 })
 
 server.applyMiddleware({ app, path })

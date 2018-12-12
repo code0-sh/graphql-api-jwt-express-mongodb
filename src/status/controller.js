@@ -1,27 +1,24 @@
 // @flow
 import Status from './model'
-import { errorName } from '../constants'
+import { errorType } from '../constants'
+import { CustomError } from '../utility'
 
 const controller = {
   statuses: async () => {
-    try {
-      const statuses = await Status.find()
-      if (!statuses) throw new Error(errorName.NO_STATUS_FOUND)
-      let preformattedStatuses = {}
-      statuses.forEach(status => {
-        preformattedStatuses[status.type] = {
-          _id: status._id,
-          code: status.code,
-          name: status.name,
-          created_at: status.created_at,
-          updated_at: status.updated_at
-        }
-      })
+    const statuses = await Status.find()
+    if (!statuses) throw new CustomError(errorType.NO_STATUS_FOUND)
+    let preformattedStatuses = {}
+    statuses.forEach(status => {
+      preformattedStatuses[status.type] = {
+        _id: status._id,
+        code: status.code,
+        name: status.name,
+        created_at: status.created_at,
+        updated_at: status.updated_at
+      }
+    })
 
-      return preformattedStatuses
-    } catch (err) {
-      throw err.message
-    }
+    return preformattedStatuses
   },
   add: async (args: $Request) => {
     const newStatus = new Status({
@@ -29,9 +26,7 @@ const controller = {
       code: args.code,
       name: args.name
     })
-    const error = await newStatus.save(
-      error => new Error(errorName.FAILED_STATUS_SAVE)
-    )
+    const error = await newStatus.save(error => errorType.FAILED_SAVE_STATUS)
     if (error) return error
     return newStatus
   },
@@ -39,12 +34,9 @@ const controller = {
     const doc = await Status.findOneAndUpdate(
       { type: args.type },
       { name: args.name, code: args.code },
-      { new: true },
-      (error, doc) => {
-        return new Error(errorName.FAILED_STATUS_UPDATE)
-      }
+      { new: true }
     )
-    if (!doc) throw new Error(errorName.FAILED_STATUS_UPDATE)
+    if (!doc) throw new CustomError(errorType.FAILED_UPDATE_STATUS)
     return doc
   },
   remove: async (args: $Request) => {
@@ -52,7 +44,7 @@ const controller = {
       type: args.type
     })
     await Status.deleteMany({ type: args.type })
-    if (!doc) throw new Error(errorName.STATUS_IS_EMPTY)
+    if (!doc) throw new CustomError(errorType.STATUS_IS_EMPTY)
     return doc
   }
 }

@@ -2,7 +2,8 @@
 import { gql } from 'apollo-server'
 
 const type = gql`
-  type Banner {
+  type Sponsor {
+    id: ID!
     name: String!
     src: String!
     url: String!

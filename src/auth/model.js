@@ -4,9 +4,9 @@ import { config } from '../config'
 
 const AuthSchema = new mongoose.Schema(
   {
-    name: { type: String, unique: true, required: true, trim: true },
-    refresh_token: { type: String, required: true, trim: true },
-    is_valid: { type: Boolean, required: true, default: true },
+    id: { type: String, unique: true, required: true, trim: true },
+    refreshToken: { type: String, required: true, trim: true },
+    isValid: { type: Boolean, required: true, default: true },
     createdAt: {
       type: Date,
       index: { expires: config.refreshTokenExpirationDays }

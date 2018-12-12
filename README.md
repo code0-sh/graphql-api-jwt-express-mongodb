@@ -5,6 +5,7 @@ GraphQL APIs with JSON Web Tokens
 GraphQL APIs using JWT with Express and MongoDB.
 
 - Framework for Node.js - using [Express](http://expressjs.com/) v4.16.4
+- GraphQL Server for Express - using [Apollo Server](https://github.com/apollographql/apollo-server) v2.3.1
 - Authentication via [JWT](https://jwt.io/)
 - Authentication middleware - using [Passport](http://www.passportjs.org/)
 - Database - using [MongoDB](https://www.mongodb.com/) v3.6.2

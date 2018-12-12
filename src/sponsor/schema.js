@@ -4,10 +4,9 @@ import { GraphQLSchema } from 'graphql'
 import type from './schema/type'
 import query from './schema/query'
 import mutation from './schema/mutation'
-import subscription from './schema/subscription'
 
 const schema: GraphQLSchema = makeExecutableSchema({
-  typeDefs: [type, query, mutation, subscription]
+  typeDefs: [type, query, mutation]
 })
 
 addMockFunctionsToSchema({ schema: schema })

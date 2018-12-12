@@ -2,9 +2,11 @@
 import { gql } from 'apollo-server'
 
 const type = gql`
-  type Color {
-    code: String!
+  type User {
+    id: ID!
     name: String!
+    email: String!
+    password: String!
   }
 `
 
